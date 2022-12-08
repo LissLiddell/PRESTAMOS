@@ -106,7 +106,7 @@
                 exit();
             }
 
-            if(VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$key1) || VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$key2){
+            if(VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$key1) || VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$key2)){
                 $alert=[
                     "Alert"=>"simple",
                     "title"=>"Ocurrio un error inesperado",
