@@ -170,5 +170,62 @@
             }
 
 
-        } /* Cierre del controlador*/ 
+            /* check password */
+            if($key1!=$key2){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"Las contraseñas capturadas no coinciden",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }else{
+                $key=VmainModel::encryption($key1);
+            }
+
+             /* check privilege */
+            if($privilege<1 || $privilege>3){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El privilegio seleccionado no es valido",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            $data_user_reg=[
+                "DNI"=>$dni,
+                "Nombre"=>$name,
+                "Apellido"=>$lastName,
+                "Telefono"=>$telephone,
+                "Direccion"=>$adress,
+                "Email"=>$Email,
+                "Usuario"=>$user,
+                "Clave"=>$key,
+                "Estado"=>"Activa",
+                "Privilegio"=>$privilege
+            ];
+
+            $add_user=UserModel::Fadd_user_model($data_user_reg);
+
+            if($add_user->rowCount()==1){
+                $alert=[
+                    "Alert"=>"clean",
+                    "title"=>"Usuario Registrado",
+                    "text"=>"Los datos del usuario han sido registrados con exito",
+                    "type"=>"success"
+                ];
+            }else{
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"No hemos podido registrar el usuario",
+                    "type"=>"error"
+                ];
+            }
+            echo json_encode($alert);
+        } /* end of controller*/ 
     }
