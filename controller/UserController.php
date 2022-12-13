@@ -116,5 +116,59 @@
                 echo json_encode($alert);
                 exit();
             }
-        }
+
+            /*check not repeat DNI */
+            $check_dni=VmainModel::exec_simple_query("SELECT usuario_dni FROM usuario WHERE usuario_dni = '$dni'");
+            if($check_dni->rowCount()>0){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El DNI ingresado ya existe",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            /*check not repeat user */
+            $check_user=VmainModel::exec_simple_query("SELECT usuario_usuario FROM usuario WHERE usuario_usuario = '$user'");
+            if($check_user->rowCount()>0){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El Usuario ingresado ya existe",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            /*check not repeat email */
+            if($Email!=""){
+                if(filter_var($Email,FILTER_VALIDATE_EMAIL)){
+                    $check_mail=VmainModel::exec_simple_query("SELECT usuario_email FROM usuario WHERE usuario_email = '$Email'");
+                        if($check_mail->rowCount()>0){
+                            $alert=[
+                                "Alert"=>"simple",
+                                "title"=>"Ocurrio un error inesperado",
+                                "text"=>"El Correo ingresado ya esta dado de alta en el sistema",
+                                "type"=>"error"
+                            ];
+                            echo json_encode($alert);
+                            exit();
+                        }
+                }else{
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"El correo ingresado no es valido",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+            }
+
+
+        } /* Cierre del controlador*/ 
     }
