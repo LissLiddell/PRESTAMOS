@@ -19,6 +19,13 @@
             require_once "./view/content/".$view."-v.php";
         }else{
             session_start(['name'=>'SPM']);
+
+            require_once "./controller/LoginController.php";
+            $lc = new LoginController();
+            if(!isset($_SESSION['token_spm']) || !isset($_SESSION['usuario_spm']) || !isset($_SESSION['privilegio_spm']) || !isset($_SESSION['id_spm'])){
+                echo $lc->force_log_out_controller();
+                exit();
+            }
     ?>
 	<!-- Main container -->
 	<main class="full-box main-container">
