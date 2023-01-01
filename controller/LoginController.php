@@ -88,5 +88,16 @@
                 </script>
                 ';
              }
-        }
+        } /* end of controller*/ 
+
+         /*------ force log out controller */
+         public function force_log_out_controller(){
+            session_unset();
+            session_destroy();
+            if(headers_sent()){
+                return "<script> window.location.href='".SERVERURL ."login/';</script>";
+            }else{
+                return header("Location: ".SERVERURL."login/");
+            }
+         } /* end of controller*/ 
     }
