@@ -100,4 +100,28 @@
                 return header("Location: ".SERVERURL."login/");
             }
          } /* end of controller*/ 
+
+         /*------ Log out controller */
+         public function Log_out_controller(){
+            session_start(['name'=>'SPM']);
+            $token=VmainModel::decryption($_POST['token']);
+            $usuario=VmainModel::decryption($_POST['usuario']);
+
+            if($token==$_SESSION['token_spm'] && $usuario==$_SESSION['usuario_spm']){
+                session_unset();
+                session_destroy();
+                $alert=[
+                    "Alert"=>"redirect",
+                    "URL"=>SERVERURL."login/"    
+                ];
+            }else{
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"No se pudo cerrar sesion en el sistema",
+                    "type"=>"error"
+                ];
+            }
+            echo json_encode($alert);
+         } /* end of controller*/ 
     }
