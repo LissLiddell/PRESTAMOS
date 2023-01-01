@@ -39,6 +39,7 @@
 		</section>
 	</main>
     <?php 
+        include "./view/inc/LogOut.php"; 
         }
     include "./view/inc/script.php"; 
     ?>
