@@ -228,4 +228,21 @@
             }
             echo json_encode($alert);
         } /* end of controller*/ 
+
+        /*controller user page*/
+        public function page_user_controller($page,$records,$privilege,$id,$url,$search){
+            $page = VmainModel::Fclean_string($page);
+            $records = VmainModel::Fclean_string($records);
+            $privilege = VmainModel::Fclean_string($privilege);
+            $id = VmainModel::Fclean_string($id);
+
+            $url = VmainModel::Fclean_string($url);
+            $url=SERVERURL.$url."/";
+
+            $search = VmainModel::Fclean_string($search);
+            $table = "";
+
+            $page = (isset($page) && $page>0) ? (int) $page: 1;
+            $start = ($page>0) ? (($page*$records)-$records): 0;
+        }/* end of controller*/ 
     }
