@@ -244,5 +244,26 @@
 
             $page = (isset($page) && $page>0) ? (int) $page: 1;
             $start = ($page>0) ? (($page*$records)-$records): 0;
+
+            if(isset($search) && $search!=""){
+                $query= "SELECT SQL_CALC_FOUNDS_ROWS * FROM usuario WHERE ((usuario_id!='$id' AND usuario_id!='1') AND (usuario_dni LIKE '%$search%'
+                OR usuario_nombre LIKE '%$search%' OR usuario_apellido LIKE '%$search%' OR usuario_telefono LIKE '%$search%'
+                OR usuario_email LIKE '%$search%' OR usuario_usuario LIKE '%$search%'))
+                ORDER BY usuario_nombre ASC LIMIT $start,$records";
+            }else{
+                $query= "SELECT SQL_CALC_FOUNDS_ROWS * FROM usuario WHERE usuario_id!='$id' AND usuario_id!='1'
+                ORDER BY usuario_nombre ASC LIMIT $start,$records";
+            }
+
+            $conn = VmainModel::Conn();
+            $data = $conn->query($query);
+            $data = $data->fetchAll();
+
+            $total = $conn->query("SELECT FOUND_ROWS()");
+            $total = (int) $total->fetchColumn();
+
+            $Npage = ceil($total/$records);
+
+            
         }/* end of controller*/ 
     }
