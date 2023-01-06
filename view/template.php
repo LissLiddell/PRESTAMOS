@@ -20,6 +20,8 @@
         }else{
             session_start(['name'=>'SPM']);
 
+            $page=explode("/", $_GET['views']);
+
             require_once "./controller/LoginController.php";
             $lc = new LoginController();
             if(!isset($_SESSION['token_spm']) || !isset($_SESSION['usuario_spm']) || !isset($_SESSION['privilegio_spm']) || !isset($_SESSION['id_spm'])){
