@@ -264,6 +264,63 @@
 
             $Npage = ceil($total/$records);
 
+            $table.= '    <div class="table-responsive">
+                                <table class="table table-dark table-sm">
+                                    <thead>
+                                        <tr class="text-center roboto-medium">
+                                            <th>#</th>
+                                            <th>DNI</th>
+                                            <th>NOMBRE</th>
+                                            <th>TELÉFONO</th>
+                                            <th>USUARIO</th>
+                                            <th>EMAIL</th>
+                                            <th>ACTUALIZAR</th>
+                                            <th>ELIMINAR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+            if ($total>=1 && $page<=$Npage) {
+                $count=$start+1;
+                foreach ($data as $rows) {
+                    $table.='
+                    <tr class="text-center" >
+                        <td>'.$count.'</td>
+                        <td>'.$rows['usuario_dni'].'</td>
+                        <td>'.$rows['usuario_nombre'].' '.$rows['usuario_apellido'].'</td>
+                        <td>'.$rows['usuario_telefono'].'</td>
+                        <td>'.$rows['usuario_usuario'].'</td>
+                        <td>'.$rows['usuario_email'].'</td>
+                        <td>
+                            <a href="<?php echo SERVERURL;?>user-update/" class="btn btn-success">
+                                <i class="fas fa-sync-alt"></i>	
+                            </a>
+                        </td>
+                        <td>
+                            <form action="">
+                                <button type="button" class="btn btn-warning">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>';
+                    $count++;
+                }
+            } else {
+                if ($total>=1) {
+                    $table.='<tr class="text-center" ><td colspan="9">
+                    <a href="'.$url.'" class="btn btn-raised btn-primary btn-sm">Dar click aqui para recargar el listado</a>
+                    </td></tr>';
+                } else {
+                    $table.='<tr class="text-center" ><td colspan="9">No hay registros en el sistema</td></tr>';
+                }
+            }
+
+            $table.='</tbody></table></div>';
+            
+            if ($total>=1 && $page<=$Npage) {
+                $table.=VmainModel::F_pagination_tables($page,$Npage,$url,7);
+            } 
+            return $table;
             
         }/* end of controller*/ 
     }
