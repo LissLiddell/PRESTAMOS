@@ -281,6 +281,7 @@
                                     <tbody>';
             if ($total>=1 && $page<=$Npage) {
                 $count=$start+1;
+                $reg_start=$start+1;
                 foreach ($data as $rows) {
                     $table.='
                     <tr class="text-center" >
@@ -291,13 +292,14 @@
                         <td>'.$rows['usuario_usuario'].'</td>
                         <td>'.$rows['usuario_email'].'</td>
                         <td>
-                            <a href="<?php echo SERVERURL;?>user-update/" class="btn btn-success">
+                            <a href="'.SERVERURL.'user-update/'.VmainModel::encryption($rows['usuario_id']).'/" class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>	
                             </a>
                         </td>
                         <td>
-                            <form action="">
-                                <button type="button" class="btn btn-warning">
+                            <form class="FormularioAjax" action="'.SERVERURL.'ajax/userAjax.php" method="POST" data-form="delete" autocomplete="off">
+                            <input type="hidden" name="user_id_for" value="'.VmainModel::encryption($rows['usuario_id']).'">
+                                <button type="submit" class="btn btn-warning">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
                             </form>
@@ -305,6 +307,7 @@
                     </tr>';
                     $count++;
                 }
+                $reg_end=$count-1;
             } else {
                 if ($total>=1) {
                     $table.='<tr class="text-center" ><td colspan="9">
@@ -316,6 +319,10 @@
             }
 
             $table.='</tbody></table></div>';
+
+            if ($total>=1 ) {
+                $table.='<p class="text-right">Mostrando usuario '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
+            }
             
             if ($total>=1 && $page<=$Npage) {
                 $table.=VmainModel::F_pagination_tables($page,$Npage,$url,7);
