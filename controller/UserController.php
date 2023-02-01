@@ -320,7 +320,7 @@
 
             $table.='</tbody></table></div>';
 
-            if ($total>=1 ) {
+            if ($total>=1 && $page<=$Npage) {
                 $table.='<p class="text-right">Mostrando usuario '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
             }
             

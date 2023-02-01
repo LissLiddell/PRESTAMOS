@@ -20,4 +20,14 @@
 
             return $sql;
         }
+
+        /*model to delete user */
+        protected static function delete_user_model($id){
+            $sql= VmainModel::Conn()->prepare("DELETE FROM usuario WHERE usuario_id=:ID");
+
+            $sql->bindParam(":ID",$id);
+            $sql->execute();
+
+            return $sql;
+        }
     }
