@@ -298,7 +298,7 @@
                         </td>
                         <td>
                             <form class="FormularioAjax" action="'.SERVERURL.'ajax/userAjax.php" method="POST" data-form="delete" autocomplete="off">
-                            <input type="hidden" name="user_id_for" value="'.VmainModel::encryption($rows['usuario_id']).'">
+                            <input type="hidden" name="user_id_del" value="'.VmainModel::encryption($rows['usuario_id']).'">
                                 <button type="submit" class="btn btn-warning">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
@@ -319,15 +319,37 @@
             }
 
             $table.='</tbody></table></div>';
-
-            if ($total>=1 && $page<=$Npage) {
-                $table.='<p class="text-right">Mostrando usuario '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
-            }
             
             if ($total>=1 && $page<=$Npage) {
+                $table.='<p class="text-right">Mostrando usuario '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
+
                 $table.=VmainModel::F_pagination_tables($page,$Npage,$url,7);
             } 
             return $table;
             
+        }/* end of controller*/ 
+
+        /*controller delete user*/
+        public function Fdelete_user_controller(){
+
+                /*Request ID user*/
+                $id=VmainModel::decryption($_POST['user_id_del']);
+                $id=VmainModel::Fclean_string($id);
+
+                /*check main user*/
+                if($id==1){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"No se puede eliminar el usuario principal del sistema",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+
+                 /*check user in BD*/
+
+                /*$check_user=*/
         }/* end of controller*/ 
     }
