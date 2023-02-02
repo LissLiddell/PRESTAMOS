@@ -349,7 +349,11 @@
                 }
 
                  /*check user in BD*/
+                $user_check=VmainModel::exec_simple_query("SELECT usuario_id FROM usuario WHERE usuario_id='$id'");
 
-                /*$check_user=*/
+                if($user_check->rowCount()<=0){
+
+                }
+
         }/* end of controller*/ 
     }
