@@ -352,8 +352,61 @@
                 $user_check=VmainModel::exec_simple_query("SELECT usuario_id FROM usuario WHERE usuario_id='$id'");
 
                 if($user_check->rowCount()<=0){
-
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"El usuario que intenta eliminar no existe en el sistema",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();     
                 }
 
+                 /*check the loans*/
+                 $loan_check=VmainModel::exec_simple_query("SELECT usuario_id FROM prestamo WHERE usuario_id='$id' LIMIT 1");
+
+                 if($loan_check->rowCount()>0){
+                     $alert=[
+                         "Alert"=>"simple",
+                         "title"=>"Ocurrio un error inesperado",
+                         "text"=>"No podemos eliminar este usuario debido a que tiene prestamos asociados, recomendamos 
+                         deshabilitar el usuario si ya no utilizado",
+                         "type"=>"error"
+                     ];
+                     echo json_encode($alert);
+                     exit();     
+                 }
+
+                 /*check privilegue*/
+                 session_start(['name'=>'SPM']);
+
+                 if($_SESSION['privilegio_spm']!= 1){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"No tienes los permisos necesarios para realizar esta operación",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit(); 
+                 }
+
+                 $delete_user=UserModel::delete_user_model($id);
+                 if($delete_user->rowCount()==1){
+                    $alert=[
+                        "Alert"=>"recargar",
+                        "title"=>"Usuario eliminado",
+                        "text"=>"El usuario ha sido eliminado del sistema exitosamente",
+                        "type"=>"success"
+                    ];
+                 }else{
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"No hemos podido eliminar el usuario, por favor intente nuevamente",
+                        "type"=>"error"
+                    ];
+                 }
+                 echo json_encode($alert);
         }/* end of controller*/ 
     }
