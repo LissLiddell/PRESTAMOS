@@ -409,4 +409,15 @@
                  }
                  echo json_encode($alert);
         }/* end of controller*/ 
+
+        /*controller data user*/
+        public function data_user_controller($type,$id){
+            $type=VmainModel::Fclean_string($type);
+
+            $id=VmainModel::decryption($id);
+            $id=VmainModel::Fclean_string($id);
+
+            return UserModel::data_user_model($type,$id);
+        
+        }/* end of controller*/ 
     }

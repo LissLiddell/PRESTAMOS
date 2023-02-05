@@ -30,4 +30,16 @@
 
             return $sql;
         }
+
+        /*model datas to user */
+        protected static function data_user_model($type,$id){
+            if($type=="Unico"){
+                $sql=VmainModel::Conn()->prepare("SELECT * FROM usuario WHERE usuario_id=:ID");
+                $sql->bindParam(":ID",$id);
+            }elseif($type=="Conteo"){
+                $sql=VmainModel::Conn()->prepare("SELECT usuario_id FROM usuario WHERE usuario_id!='1'");
+            }
+            $sql->execute();
+            return $sql;
+        }
     }
