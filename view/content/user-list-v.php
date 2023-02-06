@@ -1,6 +1,7 @@
 <!-- Page header -->
 
-<?php if($_SESSION['privilegio_spm']!=1){
+<?php 
+    if($_SESSION['privilegio_spm']!=1){
     echo $lc->force_log_out_controller();
     exit();
 }?>

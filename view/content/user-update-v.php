@@ -1,8 +1,12 @@
 <!-- Page header -->
-<?php if($_SESSION['privilegio_spm']!=1){
-    echo $lc->force_log_out_controller();
-    exit();
-}?>
+<?php 
+if($lc->encryption($_SESSION['id_spm'])!=$page[1]){
+    if($_SESSION['privilegio_spm']!=1){
+        echo $lc->force_log_out_controller();
+        exit();
+        }
+}
+?>
 <div class="full-box page-header">
     <h3 class="text-left">
         <i class="fas fa-sync-alt fa-fw"></i> &nbsp; ACTUALIZAR USUARIO
@@ -11,7 +15,7 @@
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit nostrum rerum animi natus beatae ex. Culpa blanditiis tempore amet alias placeat, obcaecati quaerat ullam, sunt est, odio aut veniam ratione.
     </p>
 </div>
-
+<?php if($_SESSION['privilegio_spm']==1){?>
 <div class="container-fluid">
     <ul class="full-box list-unstyled page-nav-tabs">
         <li>
@@ -25,9 +29,18 @@
         </li>
     </ul>	
 </div>
-
+<?php } ?> 
 <!-- Content -->
 <div class="container-fluid">
+    <?php
+        require_once "./controller/UserController.php";
+        $ins_user = new UserController();
+
+        $data_user = $ins_user->data_user_controller("Unico",$page[1]);
+
+        if($data_user->rowCount()==1){
+            $fields=$data_user->fetch();
+    ?>
     <form action="" class="form-neon" autocomplete="off">
         <fieldset>
             <legend><i class="far fa-address-card"></i> &nbsp; Información personal</legend>
@@ -162,10 +175,11 @@
             <button type="submit" class="btn btn-raised btn-success btn-sm"><i class="fas fa-sync-alt"></i> &nbsp; ACTUALIZAR</button>
         </p>
     </form>
-
+    <?php }else{ ?>
     <div class="alert alert-danger text-center" role="alert">
         <p><i class="fas fa-exclamation-triangle fa-5x"></i></p>
         <h4 class="alert-heading">¡Ocurrió un error inesperado!</h4>
         <p class="mb-0">Lo sentimos, no podemos mostrar la información solicitada debido a un error.</p>
     </div>
+    <?php } ?>
 </div>

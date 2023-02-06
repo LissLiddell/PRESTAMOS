@@ -49,15 +49,20 @@
 			<p>700 Registrados</p>
 		</div>
 	</a>
-	<?php if($_SESSION['privilegio_spm']==1){?>
+	<?php 
+	if($_SESSION['privilegio_spm']==1){
+		require_once "./controller/UserController.php";
+		$ins_user = new UserController();
+		$total_user = $ins_user->data_user_controller("Conteo",0);
+	?>
 	<a href="<?php echo SERVERURL;?>user-list/" class="tile">
 		<div class="tile-tittle">Usuarios</div>
 		<div class="tile-icon">
 			<i class="fas fa-user-secret fa-fw"></i>
-			<p>50 Registrados</p>
+			<p><?php echo $total_user->rowCount();	 ?> Registrados</p>
 		</div>
 	</a>
-	<?php }?>
+	<?php } ?>
 	<a href="<?php echo SERVERURL;?>company/" class="tile">
 		<div class="tile-tittle">Empresa</div>
 		<div class="tile-icon">
