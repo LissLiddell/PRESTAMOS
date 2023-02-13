@@ -423,6 +423,65 @@
 
         /*controller update user */
         public function update_user_controller($data){
+            //receive the id
+            $id=VmainModel::decryption($_POST['user_id_up']);
+            $id=VmainModel::Fclean_string($id);
 
+            //check user on DB
+            $check_user=VmainModel::exec_simple_query("SELECT * FROM usuario WHERE usuario_id='$id'");
+
+            if($check_user->rowCount()<=0){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"No hemos encontrado el usuario en el sistema",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }else{
+                $fields = $check_user->fetch();
+            }
+
+            $dni = VmainModel::Fclean_string($_POST['usuario_dni_up']);
+            $name = VmainModel::Fclean_string($_POST['usuario_nombre_up']);
+            $lastName = VmainModel::Fclean_string($_POST['usuario_apellido_up']);
+            $telephone = VmainModel::Fclean_string($_POST['usuario_telefono_up']);
+            $adress = VmainModel::Fclean_string($_POST['usuario_direccion_up']);
+
+            $user = VmainModel::Fclean_string($_POST['usuario_usuario_up']);
+            $Email = VmainModel::Fclean_string($_POST['usuario_email_up']);
+
+            if(isset($_POST['usuario_estado_up'])){
+                $state=VmainModel::Fclean_string($_POST['usuario_estado_up']);
+            }else{
+                $state= $fields['usuario_estado'];
+            }
+
+            if(isset($_POST['usuario_privilegio_up'])){
+                $privilege=VmainModel::Fclean_string($_POST['usuario_privilegio_up']);
+            }else{
+                $privilege= $fields['usuario_privilegio'];
+            }
+
+            $user_admin = VmainModel::Fclean_string($_POST['user_admin']);
+
+            $admin_key = VmainModel::Fclean_string($_POST['key_admin']);
+            $admin_key = VmainModel::encryption($admin_key);
+
+            $type_count = VmainModel::Fclean_string($_POST['type_count']);
+
+            /* verify empty fields */
+
+            if($dni=="" || $name=="" || $lastName=="" || $user=="" || $user_admin=="" || $admin_key==""){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"No has llenado todos los campos que son obligatorios",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
         }/* end of controller*/
     }
