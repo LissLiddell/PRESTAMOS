@@ -420,4 +420,9 @@
             return UserModel::data_user_model($type,$id);
         
         }/* end of controller*/ 
+
+        /*controller update user */
+        public function update_user_controller($data){
+
+        }/* end of controller*/
     }

@@ -31,7 +31,7 @@
             return $sql;
         }
 
-        /*model datas to user */
+        /*model data of user */
         protected static function data_user_model($type,$id){
             if($type=="Unico"){
                 $sql=VmainModel::Conn()->prepare("SELECT * FROM usuario WHERE usuario_id=:ID");
@@ -39,6 +39,35 @@
             }elseif($type=="Conteo"){
                 $sql=VmainModel::Conn()->prepare("SELECT usuario_id FROM usuario WHERE usuario_id!='1'");
             }
+            $sql->execute();
+            return $sql;
+        }
+
+        /*model update user */
+        protected static function update_user_model($data){
+            $sql=VmainModel::Conn()->prepare("UPDATE usuario SET usuario_dni=:DNI,
+            usuario_nombre=:Nombre,
+            usuario_apellido=:Apellido,
+            usuario_telefono=:Telefono,
+            usuario_direccion=:Direccion,
+            usuario_email=:Email,
+            usuario_usuario=:Usuario,
+            usuario_clave=:Clave,
+            usuario_estado=:Estado,
+            usuario_privilegio=:Privilegio WHERE usuario_id:ID");
+
+            $sql->bindParam(":DNI",$data['DNI']);
+            $sql->bindParam(":Nombre",$data['Nombre']);
+            $sql->bindParam(":Apellido",$data['Apellido']);
+            $sql->bindParam(":Telefono",$data['Telefono']);
+            $sql->bindParam(":Direccion",$data['Direccion']);
+            $sql->bindParam(":Email",$data['Email']);
+            $sql->bindParam(":Usuario",$data['Usuario']);
+            $sql->bindParam(":Clave",$data['Clave']);
+            $sql->bindParam(":Estado",$data['Estado']);
+            $sql->bindParam(":Privilegio",$data['Privilegio']);
+            $sql->bindParam(":ID",$data['ID']);
+
             $sql->execute();
             return $sql;
         }
