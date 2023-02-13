@@ -133,6 +133,7 @@ if($lc->encryption($_SESSION['id_spm'])!=$page[1]){
                 </div>
             </div>
         </fieldset>
+        <?php if($_SESSION['privilegio_spm']==1 && $fields['usuario_id']!=1){?>
         <br><br><br>
         <fieldset>
             <legend><i class="fas fa-medal"></i> &nbsp; Nivel de privilegio</legend>
@@ -144,16 +145,19 @@ if($lc->encryption($_SESSION['id_spm'])!=$page[1]){
                         <p><span class="badge badge-dark">Registrar</span> Solo permisos para registrar</p>
                         <div class="form-group">
                             <select class="form-control" name="usuario_privilegio_up">
-                                <option value="" selected="" disabled="">Seleccione una opción</option>
-                                <option value="1">Control total</option>
-                                <option value="2">Edición</option>
-                                <option value="3">Registrar</option>
+                                
+                                <option value="1" <?php if($fields['usuario_privilegio']==1){  echo 'selected=""';} ?> >Control total <?php if($fields['usuario_privilegio']==1){  '(Actual)'; } ?> </option>
+
+                                <option value="2" <?php if($fields['usuario_privilegio']==2){  echo 'selected=""';} ?> >Edición <?php if($fields['usuario_privilegio']==2){  '(Actual)'; } ?> </option>
+
+                                <option value="3" <?php if($fields['usuario_privilegio']==3){  echo 'selected=""';} ?> >Registrar <?php if($fields['usuario_privilegio']==3){  '(Actual)'; } ?> </option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
         </fieldset>
+        <?php } ?> 
         <br><br><br>
         <fieldset>
             <p class="text-center">Para poder guardar los cambios en esta cuenta debe de ingresar su nombre de usuario y contraseña</p>
@@ -174,6 +178,11 @@ if($lc->encryption($_SESSION['id_spm'])!=$page[1]){
                 </div>
             </div>
         </fieldset>
+        <?php if($lc->encryption($_SESSION['id_spm'])!=$page[1]){ ?>
+            <input type="hidden" name="type_count" value="Impropia">
+        <?php }else{ ?>
+            <input type="hidden" name="type_count" value="Propia"> 
+        <?php } ?>    
         <p class="text-center" style="margin-top: 40px;">
             <button type="submit" class="btn btn-raised btn-success btn-sm"><i class="fas fa-sync-alt"></i> &nbsp; ACTUALIZAR</button>
         </p>
