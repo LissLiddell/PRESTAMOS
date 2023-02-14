@@ -467,13 +467,12 @@
             $user_admin = VmainModel::Fclean_string($_POST['user_admin']);
 
             $admin_key = VmainModel::Fclean_string($_POST['key_admin']);
-            $admin_key = VmainModel::encryption($admin_key);
 
             $type_count = VmainModel::Fclean_string($_POST['type_count']);
 
             /* verify empty fields */
 
-            if($dni=="" || $name=="" || $lastName=="" || $user=="" || $user_admin=="" || $admin_key==""){
+            if($dni=="" || $name=="" || $lastName=="" || $user=="" || $user_admin=="" || $admin_key=="" ){//|| $telephone=="" || $adress=="" || $Email==""
                 $alert=[
                     "Alert"=>"simple",
                     "title"=>"Ocurrio un error inesperado",
@@ -483,5 +482,155 @@
                 echo json_encode($alert);
                 exit();
             }
+
+            /*verify data integrity */
+            if(VmainModel::Fcheck_data("[0-9-]{10,20}",$dni)){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El DNI no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            if(VmainModel::Fcheck_data("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,35}",$name)){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El Nombre no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            if(VmainModel::Fcheck_data("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{5,35}",$lastName)){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El Apellido no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            if($telephone!=""){
+                if(VmainModel::Fcheck_data("[0-9()+]{8,20}",$telephone)){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"El Telefono no coincide con el formato solicitado",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+            }
+
+            
+            if($adress!=""){
+                if(VmainModel::Fcheck_data("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ().,#\- ]{1,190}",$adress)){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"La DIRECCION no coincide con el formato solicitado",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+            }
+
+            if(VmainModel::Fcheck_data("[a-zA-Z0-9]{1,35}",$user)){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El nombre de Usuario no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            if(VmainModel::Fcheck_data("[a-zA-Z0-9]{1,35}",$user_admin)){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"Tu nombre de Usuario no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            if(VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$admin_key)){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"Tu CLAVE de Usuario no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            $admin_key = VmainModel::encryption($admin_key);
+
+            if($privilege<1  || $privilege>3){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El privilegio no corresponde a un valor valido",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            if($state!="Activa" && $state!="Deshabilitada"){
+                $alert=[
+                    "Alert"=>"simple",
+                    "title"=>"Ocurrio un error inesperado",
+                    "text"=>"El estado de la cuenta no coincide con el formato solicitado",
+                    "type"=>"error"
+                ];
+                echo json_encode($alert);
+                exit();
+            }
+
+            /*check not repeat DNI */
+            if($dni!= $fields['usuario_dni']){
+                $check_dni=VmainModel::exec_simple_query("SELECT usuario_dni FROM usuario WHERE usuario_dni = '$dni'");
+                if($check_dni->rowCount()>0){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"El DNI ingresado ya existe",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+            }
+            
+
+            /*check not repeat user */
+            if($user!= $fields['usuario_usuario']){
+                $check_user=VmainModel::exec_simple_query("SELECT usuario_usuario FROM usuario WHERE usuario_usuario = '$user'");
+                if($check_user->rowCount()>0){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"El Usuario ingresado ya existe",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+            }
+            
         }/* end of controller*/
     }
