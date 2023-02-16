@@ -472,7 +472,7 @@
 
             /* verify empty fields */
 
-            if($dni=="" || $name=="" || $lastName=="" || $user=="" || $user_admin=="" || $admin_key=="" ){//|| $telephone=="" || $adress=="" || $Email==""
+            if($dni=="" || $name=="" || $lastName=="" || $user=="" || $user_admin=="" || $admin_key=="" ){
                 $alert=[
                     "Alert"=>"simple",
                     "title"=>"Ocurrio un error inesperado",
@@ -632,5 +632,65 @@
                 }
             }
             
+            /*check email */
+            if($Email!=$fields['usuario_email'] && $Email!=""){
+                if(filter_var($Email,FILTER_VALIDATE_EMAIL)){
+                    $check_email=VmainModel::exec_simple_query("SELECT usuario_email FROM usuario WHERE usuario_email = '$Email'");
+                    if($check_email->rowCount()>0){
+                        $alert=[
+                            "Alert"=>"simple",
+                            "title"=>"Ocurrio un error inesperado",
+                            "text"=>"El nuevo email ingresado ya se encuentra registrado en el sistema",
+                            "type"=>"error"
+                        ];
+                        echo json_encode($alert);
+                        exit();
+                    }
+                }else{
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"A ingresado un correo no valido",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+
+                /*check keys */
+                if($_POST['user_new_key_1']!="" || $_POST['user_new_key_2']!=""){
+                    if($_POST['user_new_key_1']!=$_POST['user_new_key_2']){
+                        $alert=[
+                            "Alert"=>"simple",
+                            "title"=>"Ocurrio un error inesperado",
+                            "text"=>"Las nuevas contraseñas capturadas no coinciden",
+                            "type"=>"error"
+                        ];
+                        echo json_encode($alert);
+                        exit();
+                    }else{
+                        if(VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$_POST['user_new_key_1']) || VmainModel::Fcheck_data("[a-zA-Z0-9$@.-]{7,100}",$_POST['user_new_key_2'])){
+                            $alert=[
+                                "Alert"=>"simple",
+                                "title"=>"Ocurrio un error inesperado",
+                                "text"=>"Las nuevas contraseñas capturadas no coinciden con el formato solicitado",
+                                "type"=>"error"
+                            ];
+                            echo json_encode($alert);
+                            exit();
+                        }
+                        $key=VmainModel::encryption($_POST['user_new_key_1']);
+                    }
+                }else{
+                    $key=$fields['usuario_clave'];
+                }
+                /*check privilegue to update*/
+                if(){
+
+                }else{
+
+                }
+            }
+
         }/* end of controller*/
     }
