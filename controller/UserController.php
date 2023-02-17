@@ -684,11 +684,22 @@
                 }else{
                     $key=$fields['usuario_clave'];
                 }
-                /*check privilegue to update*/
-                if(){
-
+                /*check privilegue to update data*/
+                if($type_count=="Propia"){
+                    $check_count=VmainModel::exec_simple_query("SELECT usuario_id FROM usuario WHERE usuario_usuario = '$user_admin' AND usuario_clave='$admin_key' AND usuario_id='$id'");
                 }else{
-
+                    session_start(['name'=>'SPM']);
+                    if($_SESSION['privilegio_spm']!=1){
+                        $alert=[
+                            "Alert"=>"simple",
+                            "title"=>"Ocurrio un error inesperado",
+                            "text"=>"No tienes los permisos necesarios para realizar esta operacion ",
+                            "type"=>"error"
+                        ];
+                        echo json_encode($alert);
+                        exit();
+                    }
+                    $check_count=VmainModel::exec_simple_query("SELECT usuario_id FROM usuario WHERE usuario_usuario = '$user_admin' AND usuario_clave='$admin_key'");
                 }
             }
 
