@@ -656,7 +656,7 @@
                     echo json_encode($alert);
                     exit();
                 }
-
+            }
                 /*check keys */
                 if($_POST['user_new_key_1']!="" || $_POST['user_new_key_2']!=""){
                     if($_POST['user_new_key_1']!=$_POST['user_new_key_2']){
@@ -684,6 +684,7 @@
                 }else{
                     $key=$fields['usuario_clave'];
                 }
+
                 /*check privilegue to update data*/
                 if($type_count=="Propia"){
                     $check_count=VmainModel::exec_simple_query("SELECT usuario_id FROM usuario WHERE usuario_usuario = '$user_admin' AND usuario_clave='$admin_key' AND usuario_id='$id'");
@@ -701,7 +702,49 @@
                     }
                     $check_count=VmainModel::exec_simple_query("SELECT usuario_id FROM usuario WHERE usuario_usuario = '$user_admin' AND usuario_clave='$admin_key'");
                 }
-            }
+
+                if($check_count->rowCount()<=0){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"Nombre y clave de administrador no validos",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+                
+                /*Prepare data to send to model*/
+                $data_user_up=[
+                    "DNI"=>$dni,
+                    "Nombre"=>$name,
+                    "Apellido"=>$lastName,
+                    "Telefono"=>$telephone,
+                    "Direccion"=>$adress,
+                    "Email"=>$Email,
+                    "Usuario"=>$user,
+                    "Clave"=>$key,
+                    "Estado"=>$state,
+                    "Privilegio"=>$privilege,
+                    "ID"=>$id
+                ];
+
+                if(UserModel::update_user_model($data_user_up)){
+                    $alert=[
+                        "Alert"=>"reload",
+                        "title"=>"Datos Actualizados",
+                        "text"=>"Los datos han sido actualizados con exito",
+                        "type"=>"success"
+                    ];                    
+                }else{
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"No se a podido actualizar la información, porfavor intente de nuevo",
+                        "type"=>"error"
+                    ];
+                }
+                echo json_encode($alert);
 
         }/* end of controller*/
     }

@@ -19,7 +19,7 @@
 
         /*update an user */
         if(isset($_POST['user_id_up'])){
-            echo $ins_user->update_user_controller();
+            echo $ins_user->update_user_controller($data_user_up);
         }
 
     }else{
