@@ -34,14 +34,14 @@
             <div class="row justify-content-md-center">
                 <div class="col-12 col-md-4">
                     <div class="form-group">
-                        <label for="busqueda_inicio_prestamo" >Fecha inicial (día/mes/año)</label>
-                        <input type="date" class="form-control" name="busqueda_inicio_prestamo" id="busqueda_inicio_prestamo" maxlength="30">
+                        <label for="start_loan_search" >Fecha inicial (día/mes/año)</label>
+                        <input type="date" class="form-control" name="start_date" id="start_loan_search" maxlength="30">
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="form-group">
-                        <label for="busqueda_final_prestamo" >Fecha final (día/mes/año)</label>
-                        <input type="date" class="form-control" name="busqueda_final_prestamo" id="busqueda_final_prestamo" maxlength="30">
+                        <label for="end_loan_search" >Fecha final (día/mes/año)</label>
+                        <input type="date" class="form-control" name="end_date" id="end_loan_search" maxlength="30">
                     </div>
                 </div>
                 <div class="col-12">
@@ -57,7 +57,7 @@
 
 <div class="container-fluid">
     <form action="">
-        <input type="hidden" name="eliminar_busqueda_prestamo" value="eliminar">
+        <input type="hidden" name="delete_search" value="eliminar">
         <div class="container-fluid">
             <div class="row justify-content-md-center">
                 <div class="col-12 col-md-6">
