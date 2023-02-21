@@ -82,6 +82,16 @@
                 unset($_SESSION[$name_var]);
             }
         }
+
+
+        //redirect
+        $url=$data_url[$model];
+        $alert=[
+            "Alerta"=>"redirect",
+            "URL"=>SERVERURL.$url."/"
+        ];
+
+        echo json_encode($alert);
     }else{
         session_unset(); 
         session_destroy();
