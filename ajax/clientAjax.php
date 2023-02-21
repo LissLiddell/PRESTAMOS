@@ -7,6 +7,11 @@
         require_once "../controller/ClientController.php";
         $ins_Client = new ClientController();
 
+        /* Add a client */
+        if(isset($_POST['client_dni_reg']) &&  isset($_POST['client_name_reg'])){
+            echo $ins_Client->FAdd_client_controller();
+        }
+
 
     }else{
         session_start(['name'=>'SPM']);

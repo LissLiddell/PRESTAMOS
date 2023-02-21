@@ -24,7 +24,7 @@
 
 <!-- Content here-->
 <div class="container-fluid">
-    <form action="" class="form-neon" autocomplete="off">
+    <form class="form-neon FormularioAjax" action="<?php echo SERVERURL; ?>ajax/clientAjax.php" method="POST" data-form="save" autocomplete="off">
         <fieldset>
             <legend><i class="fas fa-user"></i> &nbsp; Información básica</legend>
             <div class="container-fluid">
@@ -38,7 +38,7 @@
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="cliente_nombre" class="bmd-label-floating">Nombre</label>
-                            <input type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,40}" class="form-control" name="cliente_nombre_reg" id="cliente_nombre" maxlength="40">
+                            <input type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,40}" class="form-control" name="client_name_reg" id="client_name" maxlength="40">
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
