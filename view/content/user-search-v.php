@@ -27,8 +27,11 @@
 </div>
 
 <!-- Content -->
+<?php 
+    if(!isset($_SESSION['search_usuario']) && empty($_SESSION['search_usuario'])){
+?>
 <div class="container-fluid">
-    <form class="form-neon" action="">
+    <form class="form-neon FormularioAjax" action="<?php echo SERVERURL; ?>ajax/searchAjax.php" method="POST" data-form="save" autocomplete="off">
         <input type="hidden" name="model" value="usuario">
         <div class="container-fluid">
             <div class="row justify-content-md-center">
@@ -47,11 +50,11 @@
         </div>
     </form>
 </div>
-
+<?php  }else{ ?>
 <div class="container-fluid">
     <form action="">
     <input type="hidden" name="model" value="usuario">
-        <input type="hidden" name="delete_search" value="delete"    >
+        <input type="hidden" name="delete_search" value="delete">
         <div class="container-fluid">
             <div class="row justify-content-md-center">
                 <div class="col-12 col-md-6">
@@ -68,6 +71,8 @@
         </div>
     </form>
 </div>
+
+
 
 <div class="container-fluid">
     <div class="table-responsive">
@@ -187,3 +192,4 @@
         </ul>
     </nav>
 </div>
+<?php } ?>
