@@ -38,11 +38,49 @@
             $end_date="end_date_".$model;
 
             // start search 
-            if(isset($_POST['start_date'])){
+            if(isset($_POST['start_date']) || isset($_POST['end_date'])){
+                if($_POST['start_date']=="" || $_POST['end_date']==""){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"Por Favor introduce una fecha de inicio y una fecha final",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
 
+                $_SESSION[$start_date]=$_POST['start_date'];
+                $_SESSION[$end_date]=$_POST['end_date'];
+            }
+
+            //delete search
+            if(isset($_POST['delete_search'])){
+                unset($_SESSION[$start_date]);
+                unset($_SESSION[$end_date]);
             }
         }else{
+            $name_var="search_".$model;
 
+            //start search
+            if(isset($_POST['initial_search'])){
+                if($_POST['initial_search']==""){
+                    $alert=[
+                        "Alert"=>"simple",
+                        "title"=>"Ocurrio un error inesperado",
+                        "text"=>"Por Favor introduce un termino de busqueda para empezar",
+                        "type"=>"error"
+                    ];
+                    echo json_encode($alert);
+                    exit();
+                }
+                $_SESSION[$name_var]=$_POST['initial_search'];
+            }
+
+            //delete search
+            if(isset($_POST['delete_search'])){
+                unset($_SESSION[$name_var]);
+            }
         }
     }else{
         session_unset(); 
