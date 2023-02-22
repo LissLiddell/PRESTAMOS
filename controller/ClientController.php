@@ -83,6 +83,19 @@
             exit();
         }
 
+        /* verify DNI*/
+        $check_dni=VmainModel::exec_simple_query("SELECT cliente_dni FROM cliente WHERE cliente_dni='$dni'");
+
+        if($check_dni->rowCount()>0){
+            $alert=[
+                "Alert"=>"simple",
+                "title"=>"Ocurrio un error inesperado",
+                "text"=>"El DNI ingresado ya se encuentra registrado en el sistema",
+                "type"=>"error"
+            ];
+            echo json_encode($alert);
+            exit();
+        }
 
     }/* Fin controlador */
 
