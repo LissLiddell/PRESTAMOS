@@ -184,25 +184,32 @@ class ClientController extends ClientModel{
                 $table.='
                 <tr class="text-center" >
                     <td>'.$count.'</td>
-                    <td>'.$rows['usuario_dni'].'</td>
-                    <td>'.$rows['usuario_nombre'].' '.$rows['usuario_apellido'].'</td>
-                    <td>'.$rows['usuario_telefono'].'</td>
-                    <td>'.$rows['usuario_usuario'].'</td>
-                    <td>'.$rows['usuario_email'].'</td>
-                    <td>
-                        <a href="'.SERVERURL.'user-update/'.VmainModel::encryption($rows['usuario_id']).'/" class="btn btn-success">
+                    <td>'.$rows['cliente_dni'].'</td>
+                    <td>'.$rows['cliente_nombre'].'</td>
+                    <td>'.$rows['cliente_apellido'].'</td>
+                    <td>'.$rows['cliente_telefono'].'</td>
+                    <td><button type="button" class="btn btn-info" data-toggle="popover" data-trigger="hover" title="'.$rows['cliente_nombre'].' '.$rows['cliente_apellido'].'" data-content="'.$rows['cliente_direccion'].'">
+                    <i class="fas fa-info-circle"></i>
+                </button></td>';
+                if($privilege==1 || $privilege==2){
+                    $table.='<td>
+                        <a href="'.SERVERURL.'client-update/'.VmainModel::encryption($rows['cliente_id']).'/" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i>	
                         </a>
-                    </td>
-                    <td>
-                        <form class="FormularioAjax" action="'.SERVERURL.'ajax/userAjax.php" method="POST" data-form="delete" autocomplete="off">
-                        <input type="hidden" name="user_id_del" value="'.VmainModel::encryption($rows['usuario_id']).'">
+                    </td>';
+                }  
+                
+                if($privilege==1){
+                    $table.='<td>
+                        <form class="FormularioAjax" action="'.SERVERURL.'ajax/clientAjax.php" method="POST" data-form="delete" autocomplete="off">
+                        <input type="hidden" name="client_id_del" value="'.VmainModel::encryption($rows['cliente_id']).'">
                             <button type="submit" class="btn btn-warning">
                                 <i class="far fa-trash-alt"></i>
                             </button>
                         </form>
-                    </td>
-                </tr>';
+                    </td> ';
+                }                    
+                    $table.='</tr>';
                 $count++;
             }
             $reg_end=$count-1;
@@ -219,7 +226,7 @@ class ClientController extends ClientModel{
         $table.='</tbody></table></div>';
         
         if ($total>=1 && $page<=$Npage) {
-            $table.='<p class="text-right">Mostrando usuario '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
+            $table.='<p class="text-right">Mostrando cliente '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
 
             $table.=VmainModel::F_pagination_tables($page,$Npage,$url,7);
         } 
