@@ -5,7 +5,7 @@
         require_once "./models/ClientModel.php";
     }
 
-    class ClientController extends ClientModel{
+class ClientController extends ClientModel{
     /*controller to add client  */
     public function FAdd_client_controller(){
         $dni=VmainModel::Fclean_string($_POST['client_dni_reg']);
@@ -123,6 +123,107 @@
             ];
         }
         echo json_encode($alert);
-    }/* Fin controlador */
+    }/* End controller */
 
-    }
+    /*controller client page*/
+    public function page_client_controller($page,$records,$privilege,$url,$search){
+        $page = VmainModel::Fclean_string($page);
+        $records = VmainModel::Fclean_string($records);
+        $privilege = VmainModel::Fclean_string($privilege);
+
+        $url = VmainModel::Fclean_string($url);
+        $url=SERVERURL.$url."/";
+
+        $search = VmainModel::Fclean_string($search);
+        $table = "";
+
+        $page = (isset($page) && $page>0) ? (int) $page: 1;
+        $start = ($page>0) ? (($page*$records)-$records): 0;
+
+        if(isset($search) && $search!=""){
+            $query= "SELECT SQL_CALC_FOUNDS_ROWS * FROM cliente WHERE cliente_dni LIKE '%$search%'
+            OR cliente_nombre LIKE '%$search%' OR cliente_apellido LIKE '%$search%' OR cliente_telefono LIKE '%$search%'
+            ORDER BY cliente_nombre ASC LIMIT $start,$records";
+        }else{
+            $query= "SELECT SQL_CALC_FOUNDS_ROWS * FROM cliente
+            ORDER BY cliente_nombre ASC LIMIT $start,$records";
+        }
+
+        $conn = VmainModel::Conn();
+        $data = $conn->query($query);
+        $data = $data->fetchAll();
+
+        $total = $conn->query("SELECT FOUND_ROWS()");
+        $total = (int) $total->fetchColumn();   
+
+        $Npage = ceil($total/$records);
+
+        $table.='    <div class="table-responsive">
+                            <table class="table table-dark table-sm">
+                                <thead>
+                                    <tr class="text-center roboto-medium">
+                                        <th>#</th>
+                                        <th>DNI</th>
+                                        <th>NOMBRE</th>
+                                        <th>APELLIDO</th>
+                                        <th>TELÉFONO</th>
+                                        <th>DIRECCIÓN</th>';
+                                        if($privilege==1 || $privilege==2){
+                                            $table.='<th>ACTUALIZAR</th>';
+                                        }
+                                        if($privilege==1){
+                                            $table.='<th>ELIMINAR</th>';
+                                        }
+                                        $table.= '</tr>
+                                </thead>
+                                <tbody>';
+        if ($total>=1 && $page<=$Npage) {
+            $count=$start+1;
+            $reg_start=$start+1;
+            foreach ($data as $rows) {
+                $table.='
+                <tr class="text-center" >
+                    <td>'.$count.'</td>
+                    <td>'.$rows['usuario_dni'].'</td>
+                    <td>'.$rows['usuario_nombre'].' '.$rows['usuario_apellido'].'</td>
+                    <td>'.$rows['usuario_telefono'].'</td>
+                    <td>'.$rows['usuario_usuario'].'</td>
+                    <td>'.$rows['usuario_email'].'</td>
+                    <td>
+                        <a href="'.SERVERURL.'user-update/'.VmainModel::encryption($rows['usuario_id']).'/" class="btn btn-success">
+                            <i class="fas fa-sync-alt"></i>	
+                        </a>
+                    </td>
+                    <td>
+                        <form class="FormularioAjax" action="'.SERVERURL.'ajax/userAjax.php" method="POST" data-form="delete" autocomplete="off">
+                        <input type="hidden" name="user_id_del" value="'.VmainModel::encryption($rows['usuario_id']).'">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>';
+                $count++;
+            }
+            $reg_end=$count-1;
+        } else {
+            if ($total>=1) {
+                $table.='<tr class="text-center" ><td colspan="9">
+                <a href="'.$url.'" class="btn btn-raised btn-primary btn-sm">Dar click aqui para recargar el listado</a>
+                </td></tr>';
+            } else {
+                $table.='<tr class="text-center" ><td colspan="9">No hay registros en el sistema</td></tr>';
+            }
+        }
+
+        $table.='</tbody></table></div>';
+        
+        if ($total>=1 && $page<=$Npage) {
+            $table.='<p class="text-right">Mostrando usuario '.$reg_start.' al '.$reg_end.' de un total de '.$total.'</p>';
+
+            $table.=VmainModel::F_pagination_tables($page,$Npage,$url,7);
+        } 
+        return $table;
+        
+    }/* end of controller*/ 
+}
