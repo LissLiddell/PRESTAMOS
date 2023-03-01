@@ -97,6 +97,22 @@
             exit();
         }
 
+        $data_client_reg=[
+            "DNI"=>$dni,
+            "Nombre"=>$name,
+            "Apellido"=>$lastname,
+            "telefono"=>$telephone,
+            "direccion"=>$adress
+        ];
+
+        $add_cliente=ClientModel::Add_client_model($data_client_reg);
+
+        if($add_cliente->rowCount()==1){
+
+        }else{
+
+        }
+
     }/* Fin controlador */
 
     }
