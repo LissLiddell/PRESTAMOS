@@ -60,7 +60,7 @@
                 unset($_SESSION[$end_date]);
             }
         }else{
-            $name_var="search_".$model;
+            $name_var=$model."_search";
 
             //start search
             if(isset($_POST['initial_search'])){

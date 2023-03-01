@@ -24,10 +24,10 @@
 
 <!-- Content here-->
 <div class="container-fluid">
-<?php 
-    require_once "./controller/ClientController.php";
-    $ins_client = new ClientController();
+	<?php 
+		require_once "./controller/ClientController.php";
+		$ins_client = new ClientController();
 
-    echo $ins_client->page_client_controller($page[1],15,$_SESSION['privilegio_spm'],$page[0],"");
+		echo $ins_client->page_client_controller($page[1],15,$_SESSION['privilegio_spm'],$page[0],"");
     ?>
 </div>
