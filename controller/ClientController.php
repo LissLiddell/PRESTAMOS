@@ -108,11 +108,21 @@
         $add_cliente=ClientModel::Add_client_model($data_client_reg);
 
         if($add_cliente->rowCount()==1){
-
+            $alert=[
+                "Alert"=>"clean",
+                "title"=>"Cliente Registrado",
+                "text"=>"Los datos del cliente se registraron correctamente",
+                "type"=>"success"
+            ];
         }else{
-
+            $alert=[
+                "Alert"=>"simple",
+                "title"=>"Ocurrio un error inesperado",
+                "text"=>"No hemos podido registrar el cliente, Porfavor intenta de nuevo",
+                "type"=>"error"
+            ];
         }
-
+        echo json_encode($alert);
     }/* Fin controlador */
 
     }
